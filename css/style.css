@@ -1,0 +1,61 @@
+body {
+    font-family: "Times New Roman", Times, serif;
+    background-color: #ffffff;
+    margin: 0;
+}
+
+#layer_1 {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #8f917b;
+}
+
+#layer_1 h1 {
+    font-family: Lato;
+    text-align: center;
+    color: #000000;
+    background: #ece6a9;
+    box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.75);
+}
+
+#next {
+    margin-right: 15px;
+    float: right;
+    background: #ffffff;
+}
+
+#back {
+    margin-left: 15px;
+    float: left;
+    background: #ffffff;
+}
+
+form h3 {
+    padding-left: 20px;
+}
+
+.layer_4 {
+    padding-left: 50px;
+    background-color: rgb(250, 250, 250);
+    color: rgb(0, 0, 0);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.layer_3 {
+    margin: 10px 20px;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #373a26;
+    color: white;
+}
+
+.layer_3 .activity_selector {
+    min-height: 60px;
+}
+
+.layer_3 {
+    min-height: 450px;
+}
+
+/*- Page 1 calender css--*/
