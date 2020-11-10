@@ -1,0 +1,87 @@
+doctype html
+head
+  title Colorie Watcher
+  link(rel='stylesheet' href='css/style.css')
+#layer_1
+  h1 Calorie Watcher
+  form
+    h3 Welcome to Colorie Watcher
+    .layer_3
+      strong
+      |                     The App will track out (inside the white box) weekely weight enteries.
+      br
+      br
+      .layer_4
+        br
+        // Below is the calender to track the weight. it needs code work
+        table#fancytable1(align='center')
+          tr
+            th(colspan='7') December
+          tr.alt1
+            td Su
+            td Mo
+            td Tu
+            td We
+            td Th
+            td Fr
+            td Sa
+          tr
+            td(height='35') 1
+            td 2
+            td 3
+            td 4
+            td 5
+            td 6
+            td 7
+          tr
+            td(height='35') 8
+            td 9
+            td 10
+            td 11
+            td 12
+            td 13
+            td 14
+          tr
+            td(height='35') 15
+            td 16
+            td 17
+            td 18
+            td 19
+            td 20
+            td 21
+          tr
+            td(height='35') 22
+            td 23
+            td 24
+            td 25
+            td 26
+            td 27
+            td 28
+          tr
+            td(height='35') 29
+            td 30
+            td 31
+            td
+            td
+            td
+            td
+          tr.alt2
+        //
+          The App will detect weight enteries
+          if the difference in starting weight reaches 15lb
+          it elerts "WOOW..YOU HAVE GAINED 15LBS"
+          Then suggustes below weekly/daily workout
+        p
+          | The App will detect weight enteries if the difference in starting weight reaches 15lb it elerts
+        p
+          strong
+            span(style='color: #ff0000;') &quot;WOOW..YOU HAVE GAINED 15LBS&quot;
+        p
+          center
+            strong
+              span(style='color: #000080;')
+                | Don&apos;t worry, we got your back, its so simple to loose weight, Click NEXT to get your Daily workout suggestion
+  button#next(onclick="window.location.href='index-page2.html';" type='button') NEXT
+  button#back(onclick="window.location.href='index.html';" type='button') BACK
+  br
+  br
