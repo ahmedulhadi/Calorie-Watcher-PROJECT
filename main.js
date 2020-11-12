@@ -70,10 +70,10 @@ app.post('/signup',(req, res) => {
     if(userServices.validateEmail(email)){
         if(userServices.validatePassword(psw)){
             if(psw != psw_repeat){
-                msg = "Repeat password must match password!";
+                msg = "Error: Passwords must match!";
             }
         } else {
-            msg = "Password length must be greater than 4!"
+            msg = "Error: Password length must be greater than 4!"
         }            
     } else {
         msg = "Enter Correct email!";
