@@ -21,5 +21,16 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^8.2.1"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmedulhadi/Calorie-Watcher-PROJECT.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ahmedulhadi/Calorie-Watcher-PROJECT/issues"
+  },
+  "homepage": "https://github.com/ahmedulhadi/Calorie-Watcher-PROJECT#readme"
 }
