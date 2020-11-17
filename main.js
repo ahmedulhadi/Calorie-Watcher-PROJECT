@@ -70,10 +70,10 @@ app.post('/signup',(req, res) => {
     if(userServices.validateEmail(email)){
         if(userServices.validatePassword(psw)){
             if(psw != psw_repeat){
-                msg = "Error: Passwords must match!";
+                msg = "Error: Passwords do not match!";
             }
         } else {
-            msg = "Error: Password length must be greater than 4!"
+            msg = "Error: Password length must be greater than 4 characters!"
         }            
     } else {
         msg = "Enter Correct email!";
@@ -81,7 +81,7 @@ app.post('/signup',(req, res) => {
     if(msg == ""){
         db.run('INSERT INTO users(email, password) VALUES(?,?)', [email, psw], function (er) {
             if (er) {
-                console.log("Error: " + er.message);
+                console.log("Error :" + er.message);
                 msg = "Error :" + er.message;
                 res.render('signup', {msg});
             }
@@ -107,7 +107,7 @@ app.post('/authenticate', (req,res) => {
             req.session.userID = rows[0].id;
             res.render('index');
         } else {
-            let msg = "Invalid Login details!";
+            let msg = "Invalid Login credentials!";
             res.render('login', {msg});
         }
     });
