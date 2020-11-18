@@ -5,7 +5,7 @@ const session = require('express-session');
 //custom modules
 const userServices = require('./services/userServices');
 const db = require('./services/database');
-const { authenticateUser } = require('./services/userServices')
+const { authenticateUser } = require('./services/userServices');
 
 const app = express();
 const port = process.env.PORT || 80;
@@ -33,25 +33,7 @@ app.get('/', (req, res) => {
         res.render('index');
     }else {
         res.render('login'); 
-//=======
-// function bmi(weight, het) {
-//     bmiResult = "";
-//     document.getElementById("bmi").innerHTML = "";
-//     weight = document.getElementById("weight").value;
-//     height =  document.getElementById("height").value;
-//     console.log(weight, height)
-//     let bmi = 703*(weight / (height*height));
-//     console.log("Your BMI is"+ bmi)
-//     if(bmi < 18.5){
-//         bmiResult= "Luckly, You are Underweight";
-//     }else if (bmi < 25){
-//         bmiResult = "Congrats, Your weight is Normal Now";
-//     }else if (bmi < 30){
-//         bmiResult = "Oops, You are already Overweight";
-//     }else{
-//         bmiResult = "Health Alert. It looks like you are already overweight. It is ok, We can fix that :)";
-// >>>>>>> 34a15ef4f841a9c08d847fe5f8d53f6b1e7ba218
-     }
+    }
 });
 
 app.get('/login', (req,res) => {
@@ -70,10 +52,10 @@ app.post('/signup',(req, res) => {
     if(userServices.validateEmail(email)){
         if(userServices.validatePassword(psw)){
             if(psw != psw_repeat){
-                msg = "Error: Passwords do not match!";
+                msg = "Repeat password must match password!";
             }
         } else {
-            msg = "Error: Password length must be greater than 4 characters!"
+            msg = "Password length must be greater than 4!"
         }            
     } else {
         msg = "Enter Correct email!";
@@ -81,7 +63,7 @@ app.post('/signup',(req, res) => {
     if(msg == ""){
         db.run('INSERT INTO users(email, password) VALUES(?,?)', [email, psw], function (er) {
             if (er) {
-                console.log("Error :" + er.message);
+                console.log("Error: " + er.message);
                 msg = "Error :" + er.message;
                 res.render('signup', {msg});
             }
@@ -107,7 +89,7 @@ app.post('/authenticate', (req,res) => {
             req.session.userID = rows[0].id;
             res.render('index');
         } else {
-            let msg = "Invalid Login credentials!";
+            let msg = "Invalid Login details!";
             res.render('login', {msg});
         }
     });

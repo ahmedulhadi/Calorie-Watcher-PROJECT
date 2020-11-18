@@ -1,0 +1,42 @@
+doctype html
+// Login page
+head
+  title Calorie Watcher
+  link(rel='stylesheet' href='css/style.css')
+#layer_1
+  h1 Calorie Watcher
+  
+    h3 Welcome to Calorie Watcher Account
+    .layer_3
+      strong
+      |                     Please login to Calorie Watcher
+      br
+      br
+      .layer_4
+        form(method="POST" action="/authenticate")
+        h2 Calorie Watcher
+          .profile-picture
+            img.avatar(src='images/avatar.png' alt='Profile Picture' height=80)
+          br
+          p 
+          i #{msg}
+          // Login form
+          .container
+            label
+              b Username: 
+            input(type='text'  name="email" placeholder='Enter Email' required='')
+            br
+            br
+            label
+              b Password: 
+            input(type='password' name="password"  placeholder='Enter Password' required='')
+            br
+            br
+            button(name="login" type='submit') Login
+            br
+            label
+              //- input(type='checkbox' checked='checked')
+              //- |  Remember me
+              a(href='signup')
+                h5 Sign up for the free Calorie Watcher account
+  br

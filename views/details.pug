@@ -1,0 +1,89 @@
+doctype html
+head
+  title Calorie Watcher
+  link(rel='stylesheet' href='../css/style.css')
+body
+  #layer_1
+    h1 Calorie Watcher
+
+      h3 Welcome to Calorie Watcher
+
+      p#user #{email}
+          br
+          <a href="/logout">Logout</a>
+
+      .layer_3
+        strong Weight and Height Entries
+        br
+        br
+        .layer_4
+          br
+
+          span I am a 
+          strong #{userDetails.gender}
+          br
+          span My starting date: 
+          strong #{userDetails.startDate}
+          br
+          span Initial Weight: 
+          strong #{userDetails.initialWeight}
+          br
+          span Initial Height: 
+          strong #{userDetails.initialHeight}
+          br
+          span Initial BMI: 
+          strong #{userDetails.initialBMI}
+          br
+          br
+
+          // Below is the calender to track the weight. it needs code work
+          table
+            tr
+              th DATE
+              th WEIGHT (lbs)
+              th HEIGHT (in)
+              th BMI
+            each log in weightLogs
+              tr
+                td= log.date
+                td= log.weight
+                td= log.height
+                td= log.bmi
+            else
+              tr
+                td No weight entry found.
+        
+          - const wdiff = (parseFloat(userDetails.initialWeight) - parseFloat(weightLogs[0].weight)).toFixed(2)
+          br
+          
+          if (wdiff < 0) 
+            p
+              center
+                strong
+                  span(style='color: #ff0000;') WOOW..YOU HAVE GAINED #{Math.abs(wdiff)} lbs.
+            p
+              center
+                strong
+                  span(style='color: #000080;')
+                    | Don&apos;t worry, we got your back, its so simple to loose weight.
+                    br 
+                    | Click EXERCISE to get your workout suggestion
+          if (wdiff > 0 && wdiff < 15) 
+            p
+              center
+                strong
+                  span(style='color: #0000a0;') GREAT, YOU HAVE LOST #{Math.abs(wdiff)} lbs.
+            p
+              center
+                strong
+                  span(style='color: #000080;')
+                    | Keep it up! Click EXERCISE to get your workout suggestion
+          if (wdiff >= 15) 
+            p
+              center
+                strong
+                  span(style='color: #008000;') CONGRATULATIONS, YOU HAVE LOST THE FRESHMAN #{Math.abs(wdiff)} lbs.
+    button#next(onclick="window.location.href='/home/exercise';" type='button') EXERCISE
+    button#back(onclick="window.location.href='/home';" type='button') BACK
+    br
+    br

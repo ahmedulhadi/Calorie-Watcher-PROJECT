@@ -1,0 +1,56 @@
+doctype html
+// Login page
+head
+  title Calorie Watcher
+  link(rel='stylesheet' href='css/style.css')
+#layer_1
+  h1 Calorie Watcher
+  form(method="POST" action="/signup")
+    h3 Welcome to Calorie Watcher Account
+    .layer_3
+      strong Please signup to Calorie Watcher
+      br
+      br
+      .layer_4
+        h2 Calorie Watcher
+        p 
+        i #{msg}
+        br
+        br
+        // Login form
+        label(for='email')
+          b username: 
+        input(type='text' placeholder='Enter Email' name='email' required='')
+        br
+        br
+        label(for='psw')
+          b Password: 
+        input(type='password' placeholder='Enter Password' name='psw' required='')
+        br
+        br
+        label(for='psw-repeat')
+          b Repeat Password: 
+        input(type='password' placeholder='Repeat Password' name='psw_repeat' required='')
+        br
+        br
+        p
+          | By creating an account you agree to our 
+          a(href='terms.html' target='_blank' rel='noopener noreferrer' style='color:dodgerblue') Terms &amp; Privacy
+          | .
+        .clearfix
+          button.signupbtn(type='submit') Sign Up
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+        br
+  button#next(onclick="window.location.href='/login'" type='submit') Login
+  br
+  br

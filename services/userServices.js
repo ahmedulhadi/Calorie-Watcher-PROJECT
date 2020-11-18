@@ -1,56 +1,73 @@
-const bcrypt = require('bcrypt');
-const db = require('./database');
+const db = require("../services/database");
 
-const userServices = {};
-
-userServices.isUserExist = function (email) {
-    // let sql = 'SELECT email FROM users WHERE email=?';
-    // console.log("sql:" + sql);
-    // let num = 0;
-    // db.all(sql, [email], (err, rows) => {
-    //     if (err) {
-    //         throw err;
-    //     }
-    //     rows.forEach((row) => {
-    //         console.log(">>>" + row.email);
-    //     });
-    //     num = rows.length;
-    //     console.log("NUM1>>>>>>>>>>>" + num);
-    //     return rows.length > 0;
-    // });
-    // console.log("NUM>>>>>>>>>>>" + num);
-};
-
-userServices.createUser = ({email, password}) => {
-    db.run(`INSERT INTO user(email, password) VALUES(?,?)`, [email, password], function (err) {
+class UserServices {
+  constructor(db) {
+    this.db = db;
+  }
+  //check if user already registered
+  isUserExists(email) {
+    return new Promise(function (resolve, reject) {
+      let sql = "SELECT email FROM users WHERE email=?";
+      db.all(sql, [email], (err, rows) => {
         if (err) {
-            console.log("Error: " + err.message);
+          reject(Error("Error:" + err.message));
         }
-            // get the last insert id
-            console.log(`A row has been inserted with rowid ${this.lastID}`);
-            //return true;
+        if (rows.length > 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
     });
-};
+  }
+  //authenticate user
+  authenticateUser({ email, password }) {
+    return new Promise(function (resolve, reject) {
+      let sql = "SELECT email FROM users WHERE email=? AND password=?";
+      db.all(sql, [email, password], (err, rows) => {
+        if (err) {
+          reject(Error("Error:" + err.message));
+        }
+        if (rows.length > 0) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
 
-userServices.authenticateUser = ({email, password}) => {
-    return false;
-};
+  //create user
+  createUser({ email, password }) {
+    return new Promise(function (resolve, reject) {
+      let sql = "INSERT INTO users(email, password) VALUES(?,?)";
+      db.run(sql, [email, password], (err) => {
+        if (err !== null) {
+          reject(Error(err.message));
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
 
-userServices.validateEmail = (email) => {
-    if(email == null || email == ""){
-        return false;
+  //validate email
+  validateEmail(email) {
+    if (email == null || email == "") {
+      return false;
     } else {
-        var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-        return emailRegex.test(email);
+      var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      return emailRegex.test(email);
     }
-};
-
-userServices.validatePassword = (password) => {
-    if(password == null || password == ""){
-        return false;
+  }
+  //validate password
+  validatePassword(password) {
+    if (password == null || password == "") {
+      return false;
     } else {
-        return password.length >= 4;
+      return password.length >= 4;
     }
-};
+  }
+}
 
-module.exports = userServices;
+module.exports = UserServices;

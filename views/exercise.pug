@@ -1,0 +1,49 @@
+doctype html
+head
+  title Calorie Watcher
+  link(rel='stylesheet' href='../css/style.css')
+#layer_1
+  h1 Calorie Watcher
+
+    h3 Welcome to Calorie Watcher
+
+    p#user #{email}
+          br
+          <a href="/logout">Logout</a>
+
+    .layer_3
+      strong
+      | Weekly Workout Routine.
+      br
+      br
+      .layer_4
+        br
+        h4 Workout Suggestion:
+        ul
+          li
+            strong MON:
+            | &nbsp;Legs/Abs
+          li
+            strong TUE:
+            | &nbsp;Chest
+          li
+            strong WED:
+            | &nbsp;Back/Abs*
+          li
+            strong THU:
+            | &nbsp;Rest
+          li
+            strong FRI:
+            | &nbsp;Shoulder/Abs*
+          li
+            strong SAT:
+            | &nbsp;Arms
+          li
+            strong SUN:
+            | &nbsp;Rest
+        p(style='font-size: 1.5em;') &nbsp;
+        p &nbsp;
+  button#next(onclick="window.location.href='/home';" type='button') HOME
+  button#back(onclick="window.location.href='/home/details';" type='button') BACK
+  br
+  br

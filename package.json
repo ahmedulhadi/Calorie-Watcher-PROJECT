@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "mocha",
-    "start": "node main.js"
+    "start": "node App.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,17 +20,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^8.2.1"
-  },
-  "directories": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ahmedulhadi/Calorie-Watcher-PROJECT.git"
-  },
-  "bugs": {
-    "url": "https://github.com/ahmedulhadi/Calorie-Watcher-PROJECT/issues"
-  },
-  "homepage": "https://github.com/ahmedulhadi/Calorie-Watcher-PROJECT#readme"
+    "mocha": "^8.2.1",
+    "nodemon": "^2.0.6"
+  }
 }

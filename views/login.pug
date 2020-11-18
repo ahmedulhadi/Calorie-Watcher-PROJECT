@@ -1,41 +1,32 @@
-doctype html
-// Login page
-head
-  title Calorie Watcher
-  link(rel='stylesheet' href='css/style.css')
-#layer_1
-  h1 Calorie Watcher
-  form(method="POST" action="/authenticate")
-    h3 Welcome to Calorie Watcher. Where you can track your daily weight to insure you don't get the infamous "Freshman 15"
+include ./components/header.pug
+    h3 Welcome to Calorie Watcher
     .layer_3
-      strong
-      |                     Please login to Calorie Watcher
-      br
-      br
-      .layer_4
-        h2 Calorie Watcher
-          .profile-picture
-            img.avatar(src='images/avatar.png' alt='Profile Picture' height=80)
-          br
-          p 
-          i #{msg}
-          // Login form
-          .container
-            label
-              b Username: 
-            input(type='text'  name="email" placeholder='Enter Email' required='')
+        h3 Please login to Calorie Watcher
+        .layer_4
+            i #{msg}
             br
             br
-            label
-              b Password: 
-            input(type='password' name="password"  placeholder='Enter Password' required='')
-            br
-            br
-            button(name="login" type='submit') Login
-            br
-            label
-              //- input(type='checkbox' checked='checked')
-              //- |  Remember me
-              a(href='signup')
+            // Login form
+            .container
+            form(method="POST" action="/login")
+                br 
+                br
+                .profile-picture
+                img.avatar(src='images/avatar.png' alt='Profile Picture' height=80)
+                br 
+                br
+                b Username: 
+                input(type='text'  name="email" placeholder='Enter Email' required='')
+                br
+                br
+                b Password: 
+                input(type='password' name="password"  placeholder='Enter Password' required='')
+                br
+                br
+                button(name="login" type='submit') Login
+                br
+                //- input(type='checkbox' checked='checked')
+                //- |  Remember me
+            a(href='signup') 
                 h5 Sign up for the free Calorie Watcher account
-  br
+    include ./components/footer.pug
