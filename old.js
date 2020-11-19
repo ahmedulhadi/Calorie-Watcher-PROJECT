@@ -11,9 +11,9 @@ function bmi(weight, het) {
     }else if (bmi < 25){
         bmiResult = "Congrats, Your weight is Normal Now";
     }else if (bmi < 30){
-        bmiResult = "Oops, You are already Overweight";
+        bmiResult = "Looks like you are already Overweight";
     }else{
-        bmiResult = "OMG, You are already Obese. Health Alert";
+        bmiResult = "Heath Alerts: Oh no, You are already Obese";
     }
 
     document.getElementById("bmi").innerHTML = bmiResult;

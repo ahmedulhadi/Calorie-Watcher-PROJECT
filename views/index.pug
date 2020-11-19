@@ -1,0 +1,42 @@
+doctype html
+head
+  title Calorie Watcher
+  link(rel='stylesheet' href='css/style.css')
+  script(src='main.js')
+#layer_1
+  h1 Calorie Watcher
+  form
+    h3 Welcome to Calorie Watcher
+    .layer_3
+      strong
+      |                     Enter your gender, starting date, and weight.
+      br
+      br
+      .layer_4
+        span I am a
+        label
+          input#male(type='radio' checked='')
+          |  Male
+        label
+          input#female(type='radio')
+          |  Female
+        br
+        br
+        span My starting date is:
+        input#male(type='date')
+        br
+        br
+        label(for='weight') My weight is:
+        input#weight(type='number' name='weight' min='1' max='500')
+        |  Lbs
+        br
+        br
+        label(for='height') My Height is:
+        input#height(onblur='bmi()' type='number' name='height' min='1' max='500')
+        |  Inches
+        br
+        br
+        h4#bmi
+  button#next(onclick="window.location.href='/logout';" type='button') LOGOUT
+  br
+  br
