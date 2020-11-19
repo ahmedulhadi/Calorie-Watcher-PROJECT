@@ -33,24 +33,6 @@ app.get('/', (req, res) => {
         res.render('index');
     }else {
         res.render('login'); 
-//=======
-// function bmi(weight, het) {
-//     bmiResult = "";
-//     document.getElementById("bmi").innerHTML = "";
-//     weight = document.getElementById("weight").value;
-//     height =  document.getElementById("height").value;
-//     console.log(weight, height)
-//     let bmi = 703*(weight / (height*height));
-//     console.log("Your BMI is"+ bmi)
-//     if(bmi < 18.5){
-//         bmiResult= "Luckly, You are Underweight";
-//     }else if (bmi < 25){
-//         bmiResult = "Congrats, Your weight is Normal Now";
-//     }else if (bmi < 30){
-//         bmiResult = "Oops, You are already Overweight";
-//     }else{
-//         bmiResult = "Health Alert. It looks like you are already overweight. It is ok, We can fix that :)";
-// >>>>>>> 34a15ef4f841a9c08d847fe5f8d53f6b1e7ba218
      }
 });
 
@@ -116,7 +98,7 @@ app.post('/authenticate', (req,res) => {
 app.get('/logout',(req,res)=>{
     //session destroy
     req.session = null;
-    let msg = "Logged out successfully!";
+    let msg = "Successfully Logged Out!";
     res.render('login', {msg});
 });
 

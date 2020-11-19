@@ -13,7 +13,7 @@ head
       br
       br
       .layer_4
-        span I am a
+        span You are a
         label
           input#male(type='radio' checked='')
           |  Male
@@ -22,16 +22,16 @@ head
           |  Female
         br
         br
-        span My starting date is:
+        span Your starting date is:
         input#male(type='date')
         br
         br
-        label(for='weight') My weight is:
+        label(for='weight') Your weight is:
         input#weight(type='number' name='weight' min='1' max='500')
         |  Lbs
         br
         br
-        label(for='height') My Height is:
+        label(for='height') Your Height is:
         input#height(onblur='bmi()' type='number' name='height' min='1' max='500')
         |  Inches
         br
