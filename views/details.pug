@@ -1,89 +1,181 @@
 doctype html
 head
-  title Calorie Watcher
+  title Colorie Watcher
   link(rel='stylesheet' href='../css/style.css')
 body
   #layer_1
     h1 Calorie Watcher
 
-      h3 Welcome to Calorie Watcher
+      h3 Welcome to Colorie Watcher
 
-      p#user #{email}
-          br
-          <a href="/logout">Logout</a>
+      p#user Hi! #{fname},
+        br
+        | (#{email})
+        br
+        <a href="/logout">Logout</a>
 
       .layer_3
         strong Weight and Height Entries
         br
         br
         .layer_4
-          br
-
-          span You are a 
+          span You are a  
           strong #{userDetails.gender}
           br
-          span Your starting date: 
-          strong #{userDetails.startDate}
+          span Your starting date:
+          - let options = { year: 'numeric', month: 'long', day: 'numeric' };
+          - let formattedate  = new Date(userDetails.startDate);
+          strong #{formattedate.toLocaleDateString("en-US", options)}
           br
           span Your initial Weight: 
-          strong #{userDetails.initialWeight}
+          strong #{userDetails.initialWeight} lbs.
           br
-          span Your initial Height: 
-          strong #{userDetails.initialHeight}
+          span Your initial Height:
+          strong= Math.floor(parseFloat(userDetails.initialHeight) / 12) 
+          | &nbsp;feet&nbsp;&nbsp;
+          strong= parseFloat(userDetails.initialHeight) % 12
+          | &nbsp;inch
           br
           span Your initial BMI: 
-          strong #{userDetails.initialBMI}
+          strong #{userDetails.initialBMI} (#{userDetails.bmiClass})
+          br
+          | (This is the WHO's recommended body weight based on BMI values.)
           br
           br
-
-          // Below is the calender to track the weight. it needs code work
-          table
-            tr
-              th DATE
-              th WEIGHT (lbs)
-              th HEIGHT (in)
-              th BMI
-            each log in weightLogs
-              tr
-                td= log.date
-                td= log.weight
-                td= log.height
-                td= log.bmi
-            else
-              tr
-                td No weight entry found.
-        
-          - const wdiff = (parseFloat(userDetails.initialWeight) - parseFloat(weightLogs[0].weight)).toFixed(2)
+          .tableFixHead
+            table
+              thead
+                tr
+                  th ENTRY DATE
+                  th WEIGHT (lbs)
+                  th HEIGHT (in)
+                  th BMI (category)
+              tbody
+                each log in weightLogs
+                  tr
+                    td= log.date
+                    td= log.weight
+                    td= Math.floor(parseFloat(log.height) / 12) 
+                        | &nbsp;feet&nbsp;&nbsp;
+                        = parseFloat(log.height) % 12
+                        | &nbsp;inch
+                    td #{log.bmi} (#{log.bmiClass})
+                else
+                  tr
+                    td No weight entry found.
+          br
+          button(onclick="window.location.href='/home';" type='button') SUBMIT WEIGHT
+          | &nbsp;&nbsp;
+          button(onclick="window.location.href='/home/exercise';" type='button') EXERCISES
+          | &nbsp;&nbsp;
+          button(onclick="window.location.href='/home/deletelast';" type='button') DELETE LAST
           br
           
-          if (wdiff < 0) 
-            p
+          if(weightLogs[0])
+            - const bmiVal = parseFloat(weightLogs[0].bmi)
+            - const wtVal = parseFloat(weightLogs[0].weight)
+            - const htVal = parseFloat(weightLogs[0].height)
+            - const inWt = parseFloat(userDetails.initialWeight)
+            - const wdiff = inWt - wtVal
+            - const absWtDf = Math.abs(wdiff)
+            br
+
+            //- if(((maxWeight - inWt) >= 15) && ((maxWeight - wtVal) >= 15))
+            //-   center
+            //-     strong
+            //-       span(style='color: #008000;') CONGRATULATIONS, YOU HAVE LOST THE FRESHMAN 15LBS.
+            //- else if(wdiff <= -15)
+            //-   center
+            //-     strong
+            //-       span(style='color: #ff0000;') &quot;WOOW..YOU HAVE GAINED FRESHMAN 15 LBS&quot;
+
+            if(wdiff <= -15)
               center
                 strong
-                  span(style='color: #ff0000;') WOOW..YOU HAVE GAINED #{Math.abs(wdiff)} lbs.
-            p
-              center
-                strong
+                  span(style='color: #ff0000;') &quot;WOOW..YOU HAVE GAINED FRESHMAN 15 LBS&quot;
+
+            if (bmiVal < 18.5) 
+              - let nWtVal = Math.ceil((18.5 * htVal * htVal) / 703 )
+              - let gnWtVal = nWtVal - wtVal
+              p
+                center
+                  strong
+                    span(style='color: #880000;') WOOW..YOU HAVE GAINED
+                  br
+                  span(style='color: #000080;') You have 
+                  if(wdiff < 0)
+                    | gained #{absWtDf} lbs since start.
+                  else
+                    | lost #{absWtDf} lbs since start.
+
+                    | You need to gain #{gnWtVal} lbs more to be NORMAL.
+              p
+                center
                   span(style='color: #000080;')
                     | Don&apos;t worry, we got your back, its so simple to loose weight.
-                    br 
-                    | Click EXERCISE to get your workout suggestion
-          if (wdiff > 0 && wdiff < 15) 
-            p
-              center
-                strong
-                  span(style='color: #0000a0;') GREAT, YOU HAVE LOST #{Math.abs(wdiff)} lbs.
-            p
-              center
-                strong
+                    br
+                    | Check Exercise to get your workout suggestion
+            
+            if (weightLogs[0].bmiClass === "Normal") 
+              p
+                center
+                  strong
+                    span(style='color: #000088;') Great, Your weight is Normal.
+                  br
+                  if(wdiff < 0)
+                    span(style='color: #000080;') You have gained #{absWtDf} lbs since start.
+                  else
+                    span(style='color: #000080;') You have lost #{absWtDf} lbs since start.
+              p
+                center
+                  span(style='color: #000080;')
+                    | Keep it up! Check Exercise to get your workout suggestion
+            
+            if (parseFloat(weightLogs[0].bmi) > 30 ) 
+              - let nWtVal = Math.floor((25 * htVal * htVal) / 703 )
+              - let lsWtVal = wtVal - nWtVal
+              p
+                center
+                  strong
+                    span(style='color: #ff0000;') OMG, You are Obese. Health Alert!!!
+                  br
+                  br
+                  if(wdiff < 0)
+                    span(style='color: #000080;') You have gained #{absWtDf} lbs since start.
+                  else if(wdiff)
+                    span(style='color: #000080;') You have lost #{absWtDf} lbs since start.
+                  br
+                  | You need to lose #{lsWtVal} lbs more to be NORMAL.
+              p
+                center
                   span(style='color: #000080;')
                     | Keep it up! Click EXERCISE to get your workout suggestion
-          if (wdiff >= 15) 
-            p
-              center
-                strong
-                  span(style='color: #008000;') CONGRATULATIONS, YOU HAVE LOST THE FRESHMAN #{Math.abs(wdiff)} lbs.
+                    br
+                    | Check Exercise to get your workout suggestion
+            else if (bmiVal > 25) 
+              - let nWtVal = Math.floor((25 * htVal * htVal) / 703 )
+              - let lsWtVal = wtVal - nWtVal
+              p
+                center
+                  strong
+                    span(style='color: #880000;') Oops, You are Overweight.
+                  br
+                  br
+                  if(wdiff < 0)
+                    span(style='color: #000080;') You have gained #{absWtDf} lbs since start.
+                  else if(wdiff)
+                    span(style='color: #000080;') You have lost #{absWtDf} lbs since start.
+                  
+                  br
+                  | You need to lose #{lsWtVal} lbs more to be NORMAL.
+              p
+                center
+                  span(style='color: #000080;')
+                    | Don&apos;t worry, we got your back, its so simple to loose weight.
+                    br
+                    | Check Exercise to get your workout suggestion
+          
     button#next(onclick="window.location.href='/home/exercise';" type='button') EXERCISE
-    button#back(onclick="window.location.href='/home';" type='button') BACK
+    button#back(onclick="window.location.href='/home';" type='button') SUBMIT WEIGHT
     br
     br

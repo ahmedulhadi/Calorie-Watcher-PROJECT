@@ -1,7 +1,9 @@
 include ./components/header.pug
     h3 Welcome to Calorie Watcher
 
-    p#user #{email}
+    p#user Hi! #{fname},
+        br
+        | (#{email})
         br
         <a href="/logout">Logout</a>
 
@@ -23,17 +25,19 @@ include ./components/header.pug
                 br
                 br
                 span My starting date is:
-                input#male(type='date' name='startDate')
+                input#male(type='date' name='startDate' required)
                 br
                 br
                 label(for='weight') My weight is:
-                input#weight(type='number' name='initialWeight' min='1' max='500')
+                input#weight(type='number' name='initialWeight' min='1' max='500' required)
                 |  Lbs
                 br
                 br
                 label(for='height') My Height is:
-                input#height(type='number' name='initialHeight' min='1' max='500')
-                |  Inches
+                input#height(type='number' name='initialHeightF' min='0' max='20' required)
+                |  &nbsp;Feet&nbsp;&nbsp;
+                input#height(type='number' name='initialHeightI' min='0' max='12' required)
+                |  &nbsp;Inches
                 br
                 br
                 button(name="add" type='submit') SUBMIT

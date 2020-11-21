@@ -9,7 +9,7 @@ const db = require("../services/database");
 const wcservices = new WatcherServices(db);
 
 router.use("/", (req, res, next) => {
-  email = req.session.userID;
+  email = req.session.email;
   wcservices
     .isUserDetailsExists(email)
     .then((result) => {
@@ -25,11 +25,15 @@ router.use("/", (req, res, next) => {
 });
 
 router.get("/", async (req, res) => {
-  let email = req.session.userID;
+  let email = req.session.email;
+  let fname = req.session.fname;
   let userDetails = await wcservices.getUserDetails(email);
   let weightLogs = await wcservices.getWeightLogs(email);
+  let maxWeight = await wcservices.getMaxWeightByEmail(email);
   let data = {
+    fname,
     email,
+    maxWeight,
     userDetails,
     weightLogs,
   };

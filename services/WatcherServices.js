@@ -23,21 +23,30 @@ class WatcherServices {
   }
 
   //add personal details
-  addPersonalDetails({
+  addUserDetails({
     email,
     gender,
     startDate,
     initialWeight,
     initialHeight,
     initialBMI,
+    bmiClass,
   }) {
     return new Promise((resolve, reject) => {
       let sql = `INSERT INTO personal_details(
-            email, gender, start_date, initial_weight, initial_height, initial_bmi)
-            VALUES(?,?,?,?,?,?)`;
+            email, gender, start_date, initial_weight, initial_height, initial_bmi, bmi_class)
+            VALUES(?,?,?,?,?,?,?)`;
       db.run(
         sql,
-        [email, gender, startDate, initialWeight, initialHeight, initialBMI],
+        [
+          email,
+          gender,
+          startDate,
+          initialWeight,
+          initialHeight,
+          initialBMI,
+          bmiClass,
+        ],
         (err) => {
           if (err !== null) {
             reject(Error(err.message));
@@ -50,13 +59,14 @@ class WatcherServices {
   }
 
   //update personal details
-  updatePersonalDetails({
+  updateUserDetails({
     email,
     gender,
     startDate,
     initialWeight,
     initialHeight,
     initailBMI,
+    bmiClass,
   }) {
     return new Promise((resolve, reject) => {
       let sql = `UPDATE personal_details
@@ -64,11 +74,20 @@ class WatcherServices {
                 start_date = ?, 
                 initial_weight = ?, 
                 initial_height = ?,
-                initial_bmi = ?
+                initial_bmi = ?,
+                bmi_class = ?
             WHERE email = ?`;
       db.run(
         sql,
-        [gender, startDate, initialWeight, initialHeight, initailBMI, email],
+        [
+          gender,
+          startDate,
+          initialWeight,
+          initialHeight,
+          initailBMI,
+          bmiClass,
+          email,
+        ],
         (err) => {
           if (err) {
             console.log(err.message);
@@ -99,7 +118,7 @@ class WatcherServices {
   getUserDetails(email) {
     return new Promise(function (resolve, reject) {
       let sql = `SELECT 
-                    email, gender, start_date, initial_weight, initial_height, initial_bmi 
+                    email, gender, start_date, initial_weight, initial_height, initial_bmi, bmi_class 
                     FROM personal_details 
                     WHERE email=?`;
       db.all(sql, [email], (err, rows) => {
@@ -114,6 +133,7 @@ class WatcherServices {
             initialWeight: rows[0].initial_weight,
             initialHeight: rows[0].initial_height,
             initialBMI: rows[0].initial_bmi,
+            bmiClass: rows[0].bmi_class,
           });
         } else {
           reject(Error("Error: No details available."));
@@ -123,12 +143,12 @@ class WatcherServices {
   }
 
   //add weight log
-  addWeightLog({ email, date, weight, height, bmi }) {
+  addWeightLog({ email, date, weight, height, bmi, bmiClass }) {
     return new Promise((resolve, reject) => {
       let sql = `INSERT INTO weight_log(
-            email, date, weight, height, bmi)
-            VALUES(?,?,?,?,?)`;
-      db.run(sql, [email, date, weight, height, bmi], (err) => {
+            email, date, weight, height, bmi, bmi_class)
+            VALUES(?,?,?,?,?,?)`;
+      db.run(sql, [email, date, weight, height, bmi, bmiClass], (err) => {
         if (err !== null) {
           reject(Error(err.message));
         } else {
@@ -144,7 +164,7 @@ class WatcherServices {
     return new Promise(function (resolve, reject) {
       let weightLogs = [];
       let sql = `SELECT 
-                    email, date, weight, height, bmi 
+                    email, date, weight, height, bmi, bmi_class 
                     FROM weight_log 
                     WHERE email=?
                     ORDER BY rowid DESC`;
@@ -159,9 +179,46 @@ class WatcherServices {
             weight: row.weight,
             height: row.height,
             bmi: row.bmi,
+            bmiClass: row.bmi_class,
           });
         });
         resolve(weightLogs);
+      });
+    });
+  }
+
+  //get last weight log
+  getLastWeightLogs(email) {
+    return new Promise(function (resolve, reject) {
+      let sql = `SELECT 
+                    email, date, weight, height, bmi, bmi_class 
+                    FROM weight_log 
+                    WHERE email=?
+                    ORDER BY rowid DESC`;
+      db.all(sql, [email], (err, rows) => {
+        if (err) {
+          reject(Error("Error:" + err.message));
+        }
+        resolve({
+          email: rows[0].email,
+          date: rows[0].date,
+          weight: rows[0].weight,
+          height: rows[0].height,
+          bmi: rows[0].bmi,
+          bmiClass: rows[0].bmi_class,
+        });
+      });
+    });
+  }
+
+  getMaxWeightByEmail(email) {
+    return new Promise(function (resolve, reject) {
+      let sql = `SELECT MAX(weight) max_wt FROM weight_log WHERE email=?`;
+      db.all(sql, [email], (err, rows) => {
+        if (err) {
+          reject(Error("Error:" + err.message));
+        }
+        resolve(rows[0].max_wt);
       });
     });
   }
@@ -172,6 +229,19 @@ class WatcherServices {
     return new Promise(function (resolve, reject) {
       let sql = `DELETE FROM weight_log WHERE email = ?`;
       db.run(sql, [email], (err) => {
+        if (err !== null) {
+          reject(Error(err.message));
+        } else {
+          resolve(true);
+        }
+      });
+    });
+  }
+
+  deleteLastWeightLog(email) {
+    return new Promise(function (resolve, reject) {
+      let sql = `DELETE FROM weight_log WHERE email=? AND rowid=(SELECT MAX(rowid) FROM weight_log WHERE email=?)`;
+      db.run(sql, [email, email], (err) => {
         if (err !== null) {
           reject(Error(err.message));
         } else {

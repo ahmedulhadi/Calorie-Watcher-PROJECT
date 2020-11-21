@@ -12,9 +12,19 @@ include ./components/header.pug
         br
         // signup form
         form(method="POST" action="/signup")
+          label(for='firstName')
+            b First Name: 
+          input(type='text' placeholder='Enter First Name' name='fname' required='')
+          br
+          br
+          label(for='lastName')
+            b Last Name: 
+          input(type='text' placeholder='Enter Last Name' name='lname' required='')
+          br
+          br
           label(for='email')
-            b Username: 
-          input(type='text' placeholder='Enter Email' name='email' required='')
+            b Username:  
+          input(type='email' placeholder='Enter Email' name='email' required='')
           br
           br
           label(for='psw')

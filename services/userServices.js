@@ -38,10 +38,11 @@ class UserServices {
   }
 
   //create user
-  createUser({ email, password }) {
+  createUser({ fname, lname, email, password }) {
     return new Promise(function (resolve, reject) {
-      let sql = "INSERT INTO users(email, password) VALUES(?,?)";
-      db.run(sql, [email, password], (err) => {
+      let sql =
+        "INSERT INTO users(fname, lname, email, password) VALUES(?,?,?,?)";
+      db.run(sql, [fname, lname, email, password], (err) => {
         if (err !== null) {
           reject(Error(err.message));
         } else {
@@ -51,15 +52,29 @@ class UserServices {
     });
   }
 
+  //get username by email
+  getUserNameByEmail(email) {
+    return new Promise(function (resolve, reject) {
+      let sql = "SELECT fname, lname FROM users WHERE email=?";
+      db.all(sql, [email], (err, rows) => {
+        if (err) {
+          reject(Error("Error:" + err.message));
+        }
+        resolve({ fname: rows[0].fname, lname: rows[0].lname });
+      });
+    });
+  }
+
   //validate email
   validateEmail(email) {
     if (email == null || email == "") {
       return false;
     } else {
-      var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-      return emailRegex.test(email);
+      var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return emailRegex.test(String(email).toLowerCase());
     }
   }
+
   //validate password
   validatePassword(password) {
     if (password == null || password == "") {

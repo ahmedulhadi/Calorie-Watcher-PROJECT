@@ -30,14 +30,13 @@ router.use("/details", detailsRoute);
 router.use("/exercise", exerciseRoute);
 
 router.get("/", (req, res, next) => {
-  email = req.session.userID;
   wcservices
-    .isUserDetailsExists(email)
+    .isUserDetailsExists(req.session.email)
     .then((result) => {
       if (result) {
         next();
       } else {
-        res.render("index_start", { email });
+        res.render("index_start", req.session);
       }
     })
     .catch((err) => {
@@ -46,10 +45,10 @@ router.get("/", (req, res, next) => {
 });
 
 router.get("/", (req, res) => {
-  email = req.session.userID;
   wcservices
-    .getUserDetails(email)
+    .getUserDetails(req.session.email)
     .then((userDetails) => {
+      userDetails.fname = req.session.fname;
       res.render("index_with_details", userDetails);
     })
     .catch((err) => {
@@ -58,7 +57,7 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  email = req.session.userID;
+  email = req.session.email;
   wcservices.isUserDetailsExists(email).then((result) => {
     if (result) {
       updateDetailsAndRespond(req, res);
@@ -69,13 +68,20 @@ router.post("/", (req, res) => {
 });
 
 function addDetailsAndRespond(req, res) {
-  req.body.email = req.session.userID;
+  req.body.email = req.session.email;
+  let feet = parseFloat(req.body.initialHeightF);
+  let inch = parseFloat(req.body.initialHeightI);
+  req.body.initialHeight = feet * 12 + inch;
   req.body.initialBMI = bmi.calculateBMI(
     req.body.initialWeight,
     req.body.initialHeight
   );
+  req.body.bmiClass = bmi.getBMIClass(
+    req.body.initialWeight,
+    req.body.initialHeight
+  );
   wcservices
-    .addPersonalDetails(req.body)
+    .addUserDetails(req.body)
     .then((result) => {
       details = null;
       if (result) {
@@ -91,13 +97,19 @@ function addDetailsAndRespond(req, res) {
 }
 
 async function updateDetailsAndRespond(req, res) {
-  req.body.email = req.session.userID;
+  req.body.email = req.session.email;
+  let feet = parseFloat(req.body.initialHeightF);
+  let inch = parseFloat(req.body.initialHeightI);
+  req.body.initialHeight = feet * 12 + inch;
   req.body.initialBMI = bmi.calculateBMI(
     req.body.initialWeight,
     req.body.initialHeight
   );
-  wcservices.updatePersonalDetails(req.body).then((result) => {
-    console.log("1>>" + result);
+  req.body.bmiClass = bmi.getBMIClass(
+    req.body.initialWeight,
+    req.body.initialHeight
+  );
+  wcservices.updateUserDetails(req.body).then((result) => {
     if (result) {
       logIntialWeight(req, res);
     } else {
@@ -107,11 +119,14 @@ async function updateDetailsAndRespond(req, res) {
 }
 
 function logIntialWeight(req, res) {
-  req.body.email = req.session.userID;
-  req.body.date = new Date().toISOString().slice(0, 10);
+  req.body.email = req.session.email;
   req.body.weight = req.body.initialWeight;
-  req.body.height = req.body.initialHeight;
+  let feet = parseFloat(req.body.initialHeightF);
+  let inch = parseFloat(req.body.initialHeightI);
+  req.body.date = req.body.startDate;
+  req.body.height = feet * 12 + inch;
   req.body.bmi = bmi.calculateBMI(req.body.weight, req.body.height);
+  req.body.bmiClass = bmi.getBMIClass(req.body.weight, req.body.height);
   wcservices
     .addWeightLog(req.body)
     .then(() => {
@@ -123,9 +138,13 @@ function logIntialWeight(req, res) {
 }
 
 router.post("/logweight", (req, res) => {
-  req.body.email = req.session.userID;
-  req.body.date = new Date().toISOString().slice(0, 10);
+  req.body.email = req.session.email;
+  let feet = parseFloat(req.body.heightF);
+  let inch = parseFloat(req.body.heightI);
+  req.body.height = feet * 12 + inch;
   req.body.bmi = bmi.calculateBMI(req.body.weight, req.body.height);
+  req.body.bmiClass = bmi.getBMIClass(req.body.weight, req.body.height);
+
   wcservices
     .addWeightLog(req.body)
     .then(() => {
@@ -138,7 +157,7 @@ router.post("/logweight", (req, res) => {
 
 router.get("/reset", (req, res, next) => {
   if (req.session.isLoggedIn) {
-    let email = req.session.userID;
+    let email = req.session.email;
     wcservices.deleteWeightLogs(email).then(() => {
       console.log(`all the logs deleted for ${email}`);
       next();
@@ -150,11 +169,29 @@ router.get("/reset", (req, res, next) => {
 
 router.get("/reset", (req, res) => {
   if (req.session.isLoggedIn) {
-    let email = req.session.userID;
+    let email = req.session.email;
     wcservices.deleteUserDetails(email).then(() => {
       console.log(`all the initial details deleted for ${email}`);
       res.redirect("/home");
     });
+  } else {
+    res.redirect("/login");
+  }
+});
+
+router.get("/deletelast", (req, res) => {
+  if (req.session.isLoggedIn) {
+    let email = req.session.email;
+    wcservices
+      .deleteLastWeightLog(email)
+      .then(() => {
+        console.log(`Last weight log deleted for ${email}`);
+        res.redirect("/home/details");
+      })
+      .catch((err) => {
+        console.log(err);
+        res.redirect("/home");
+      });
   } else {
     res.redirect("/login");
   }

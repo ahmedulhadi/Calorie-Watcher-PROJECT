@@ -51,10 +51,10 @@ router.post("/", (req, res, next) => {
 //register user and send back response
 router.use("/", (req, res) => {
   let msg = "";
-  const { email, psw, psw_repeat } = req.body;
+  const { fname, lname, email, psw, psw_repeat } = req.body;
   // console.log(`1>>>> ${email} >>>>>>>>> ${psw}`);
   uservices
-    .createUser({ email, password: psw })
+    .createUser({ fname, lname, email, password: psw })
     .then((result) => {
       if (result) {
         msg = "Account created successfully! Login to continue.";

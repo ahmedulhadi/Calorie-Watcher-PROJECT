@@ -22,12 +22,27 @@ db.serialize(() => {
   //     console.log("Table droped");
   //   }
   // });
-
+  // db.run("DROP TABLE personal_details", [], (err) => {
+  //   if (err) {
+  //     console.error(err.message);
+  //   } else {
+  //     console.log("Table droped");
+  //   }
+  // });
+  // db.run("DROP TABLE weight_log", [], (err) => {
+  //   if (err) {
+  //     console.error(err.message);
+  //   } else {
+  //     console.log("Table droped");
+  //   }
+  // });
   //Create users table if it doesn't already exist
   db.run(
     `CREATE TABLE IF NOT EXISTS users(
-      email TEXT NOT NULL PRIMARY KEY, 
-      password TEXT)`,
+        fname TEXT,
+        lname TEXT,
+        email TEXT NOT NULL PRIMARY KEY,
+        password TEXT)`,
     [],
     (err) => {
       if (err) {
@@ -37,16 +52,16 @@ db.serialize(() => {
       }
     }
   );
-
   //Create personal_details table if it doesn't already exist
   db.run(
     `CREATE TABLE IF NOT EXISTS personal_details(
-    email TEXT NOT NULL PRIMARY KEY, 
+    email TEXT NOT NULL PRIMARY KEY,
     gender TEXT,
     start_date TEXT,
     initial_weight REAL,
     initial_height REAL,
-    initial_bmi REAL
+    initial_bmi REAL,
+    bmi_class TEXT
     )`,
     [],
     (err) => {
@@ -57,15 +72,15 @@ db.serialize(() => {
       }
     }
   );
-
   //create weight_log table if it doesn't already exist
   db.run(
     `CREATE TABLE IF NOT EXISTS weight_log(
-    email TEXT,
+    email TEXT NOT NULL,
     date TEXT,
     weight REAL,
     height REAL,
-    bmi REAL)`,
+    bmi REAL,
+    bmi_class TEXT)`,
     [],
     (err) => {
       if (err) {

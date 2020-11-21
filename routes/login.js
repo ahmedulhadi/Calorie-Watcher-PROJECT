@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 });
 
 // authenticate login details
-router.post("/", (req, res, next) => {
+router.post("/", async (req, res) => {
   let msg = "";
   const { email, password } = req.body;
   if (uservices.validateEmail(email)) {
@@ -20,9 +20,7 @@ router.post("/", (req, res, next) => {
       .authenticateUser({ email, password })
       .then((result) => {
         if (result) {
-          req.session.isLoggedIn = true;
-          req.session.userID = email;
-          res.redirect("/home");
+          setSessionAndRespond(req, res);
         } else {
           msg = "Login details are invalid/incorrect!";
           res.render("login", { msg });
@@ -37,5 +35,15 @@ router.post("/", (req, res, next) => {
     res.render("login", { msg });
   }
 });
+
+async function setSessionAndRespond(req, res) {
+  const { email } = req.body;
+  let name = await uservices.getUserNameByEmail(email);
+  console.log("Logged in:" + JSON.stringify(name));
+  req.session.isLoggedIn = true;
+  req.session.email = email;
+  req.session.fname = name.fname;
+  res.redirect("/home");
+}
 
 module.exports = router;
